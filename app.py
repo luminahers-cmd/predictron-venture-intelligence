@@ -14,6 +14,10 @@ from utils.export import generate_simple_pdf
 from utils.validators import validate_startup_inputs
 
 logging.basicConfig(level=logging.INFO)
+SUBHEADER_TEXT = (
+    "AI-powered venture intelligence for founders, venture capitalists, family "
+    "offices, and hedge funds"
+)
 
 st.set_page_config(
     page_title="Predictron Venture Intelligence",
@@ -22,9 +26,7 @@ st.set_page_config(
 )
 
 st.title("🚀 Predictron Venture Intelligence")
-st.subheader(
-    "AI-powered venture intelligence for founders, venture capitalists, family offices, and hedge funds"
-)
+st.subheader(SUBHEADER_TEXT)
 
 key_status = get_api_key_status(st.secrets)
 service = None

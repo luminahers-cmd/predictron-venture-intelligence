@@ -25,7 +25,7 @@ def validate_startup_inputs(startup_name: str, website: str, description: str) -
         errors.append("Startup name is required.")
 
     if website.strip() and not is_valid_website_url(website.strip()):
-        errors.append("Website URL must start with http:// or https://")
+        errors.append("Website URL must start with http:// or https://.")
 
     cleaned_description = description.strip()
     if not cleaned_description:

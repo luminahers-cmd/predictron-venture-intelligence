@@ -19,10 +19,10 @@ def _read_secret(secrets: Optional[Mapping[str, Any]], key: str) -> Optional[str
     value: Any = None
     try:
         value = secrets.get(key)
-    except Exception:
+    except AttributeError:
         try:
             value = secrets[key]
-        except Exception:
+        except (KeyError, TypeError):
             value = None
 
     if isinstance(value, str):
