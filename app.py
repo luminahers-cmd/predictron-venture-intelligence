@@ -23,7 +23,7 @@ st.set_page_config(
 
 st.title("🚀 Predictron Venture Intelligence")
 st.subheader(
-    "AI-powered venture intelligence for founders, VCs, family offices, and hedge funds"
+    "AI-powered venture intelligence for founders, venture capitalists, family offices, and hedge funds"
 )
 
 key_status = get_api_key_status(st.secrets)

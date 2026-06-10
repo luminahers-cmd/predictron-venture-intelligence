@@ -30,6 +30,8 @@ class GeminiResponseError(GeminiServiceError):
 
 class GeminiService:
     MODEL = "gemini-2.5-flash"
+    MIN_SCORE = 3
+    BASE_SCORE = 4
 
     def __init__(self, api_key: str, client: Any | None = None) -> None:
         if not api_key:
@@ -74,12 +76,12 @@ class GeminiService:
             "venture_potential_score": ["scale", "global", "recurring", "revenue", "enterprise"],
         }
 
-        MIN_SCORE = 3
-        BASE_SCORE = 4
         scores: dict[str, int] = {}
         for metric, keywords in scoring_keywords.items():
             hits = sum(1 for keyword in keywords if keyword in lowered)
-            scores[metric] = min(10, max(MIN_SCORE, BASE_SCORE + hits))
+            scores[metric] = min(
+                10, max(self.MIN_SCORE, self.BASE_SCORE + hits)
+            )
 
         return scores
 
