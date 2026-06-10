@@ -32,7 +32,7 @@ def generate_simple_pdf(text: str) -> bytes:
     commands.append("ET")
 
     # PDF text streams use Latin-1 compatible bytes in this lightweight writer.
-    # Non-Latin characters are replaced to keep generation dependency-free.
+    # Non-Latin characters are replaced with '?' to keep generation dependency-free.
     stream_data = "\n".join(commands).encode("latin-1", errors="replace")
 
     objects = [

@@ -121,7 +121,7 @@ if analyze and service is not None:
                 st.error("Gemini returned an invalid response.")
                 st.caption(str(exc))
             except GeminiServiceError as exc:
-                st.error("Gemini analysis failed gracefully.")
+                st.error("Gemini service encountered an error.")
                 st.caption(str(exc))
             except Exception:
                 st.error("Unexpected error while analyzing startup. Please try again.")

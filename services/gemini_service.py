@@ -79,6 +79,8 @@ class GeminiService:
         scores: dict[str, int] = {}
         for metric, keywords in scoring_keywords.items():
             hits = sum(1 for keyword in keywords if keyword in lowered)
+            # Keyword hits add confidence above a conservative baseline (BASE_SCORE),
+            # while MIN_SCORE prevents very sparse descriptions from collapsing to zero.
             scores[metric] = min(
                 10, max(self.MIN_SCORE, self.BASE_SCORE + hits)
             )
