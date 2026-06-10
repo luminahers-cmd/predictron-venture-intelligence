@@ -4,9 +4,13 @@ from __future__ import annotations
 
 from urllib.parse import urlparse
 
+MIN_GEMINI_KEY_LENGTH = 20
+
 
 def is_valid_gemini_api_key(api_key: str | None) -> bool:
-    return bool(api_key and api_key.startswith("AIza") and len(api_key) >= 20)
+    return bool(
+        api_key and api_key.startswith("AIza") and len(api_key) >= MIN_GEMINI_KEY_LENGTH
+    )
 
 
 def is_valid_website_url(url: str) -> bool:

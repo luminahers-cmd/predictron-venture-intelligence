@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import textwrap
 
+PDF_MAX_LINES = 300
+
 
 def _pdf_escape(text: str) -> str:
     return text.replace("\\", "\\\\").replace("(", "\\(").replace(")", "\\)")
@@ -18,7 +20,8 @@ def generate_simple_pdf(text: str) -> bytes:
             continue
         wrapped_lines.extend(textwrap.wrap(line, width=90) or [""])
 
-    display_lines = wrapped_lines[:300]
+    # Keep export to a single-page lightweight PDF for Streamlit download reliability.
+    display_lines = wrapped_lines[:PDF_MAX_LINES]
 
     commands = ["BT", "/F1 10 Tf", "50 770 Td", "14 TL"]
     for line in display_lines:

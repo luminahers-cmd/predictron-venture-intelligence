@@ -40,7 +40,6 @@ class GeminiService:
                 "Generate a new API key in Google AI Studio."
             )
 
-        self._key_hint = f"{api_key[:4]}...{api_key[-4:]}"
         self.client = client or genai.Client(api_key=api_key)
 
     def analyze_startup(self, startup_name: str, website: str, description: str) -> str:
@@ -53,9 +52,7 @@ class GeminiService:
                 contents=prompt,
             )
         except Exception as exc:
-            logger.exception(
-                "Gemini generate_content failed for key=%s", self._key_hint
-            )
+            logger.exception("Gemini generate_content failed")
             raise self._map_exception(exc) from exc
 
         text = getattr(response, "text", None)
@@ -77,10 +74,12 @@ class GeminiService:
             "venture_potential_score": ["scale", "global", "recurring", "revenue", "enterprise"],
         }
 
+        minimum_score = 3
+        base_score = 4
         scores: dict[str, int] = {}
         for metric, keywords in scoring_keywords.items():
             hits = sum(1 for keyword in keywords if keyword in lowered)
-            scores[metric] = min(10, max(3, 4 + hits))
+            scores[metric] = min(10, max(minimum_score, base_score + hits))
 
         return scores
 
