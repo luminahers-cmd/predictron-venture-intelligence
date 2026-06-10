@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import textwrap
 
+# Cap content to keep the export single-page and avoid overly large downloads.
+# Lines beyond this threshold are intentionally truncated in the PDF output.
 PDF_MAX_LINES = 300
 
 

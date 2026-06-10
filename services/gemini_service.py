@@ -74,12 +74,12 @@ class GeminiService:
             "venture_potential_score": ["scale", "global", "recurring", "revenue", "enterprise"],
         }
 
-        minimum_score = 3
-        base_score = 4
+        MIN_SCORE = 3
+        BASE_SCORE = 4
         scores: dict[str, int] = {}
         for metric, keywords in scoring_keywords.items():
             hits = sum(1 for keyword in keywords if keyword in lowered)
-            scores[metric] = min(10, max(minimum_score, base_score + hits))
+            scores[metric] = min(10, max(MIN_SCORE, BASE_SCORE + hits))
 
         return scores
 

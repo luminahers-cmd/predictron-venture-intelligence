@@ -1,6 +1,6 @@
 import unittest
 
-from config import get_api_key_status, resolve_api_key
+from config import get_api_key_status, mask_api_key, resolve_api_key
 
 
 class ConfigTests(unittest.TestCase):
@@ -17,6 +17,12 @@ class ConfigTests(unittest.TestCase):
         self.assertTrue(status["is_configured"])
         self.assertFalse(status["is_valid"])
         self.assertIn("invalid", status["message"].lower())
+
+    def test_mask_api_key_short_and_long_values(self):
+        self.assertEqual(mask_api_key(None), "not-set")
+        self.assertEqual(mask_api_key(""), "not-set")
+        self.assertEqual(mask_api_key("short"), "****")
+        self.assertEqual(mask_api_key("AIza12345678"), "AIza...5678")
 
 
 if __name__ == "__main__":
