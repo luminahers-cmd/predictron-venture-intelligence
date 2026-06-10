@@ -14,7 +14,10 @@ def _pdf_escape(text: str) -> str:
 
 
 def generate_simple_pdf(text: str) -> bytes:
-    """Generate a lightweight single-page PDF without extra dependencies."""
+    """Generate a lightweight single-page PDF without extra dependencies.
+
+    Note: non-Latin-1 characters are replaced with '?' in the PDF output.
+    """
     wrapped_lines: list[str] = []
     for line in text.splitlines():
         if not line.strip():

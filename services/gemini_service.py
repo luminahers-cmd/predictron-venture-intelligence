@@ -32,6 +32,16 @@ class GeminiService:
     MODEL = "gemini-2.5-flash"
     MIN_SCORE = 3
     BASE_SCORE = 4
+    INVESTOR_PROFILES = [
+        {"name": "Sequoia Capital", "focus": ["enterprise", "ai", "saas"], "stage": "Series A-C"},
+        {"name": "Andreessen Horowitz", "focus": ["ai", "consumer", "infrastructure"], "stage": "Seed-Growth"},
+        {"name": "Accel", "focus": ["saas", "fintech", "marketplace"], "stage": "Seed-Series B"},
+        {"name": "Lightspeed Venture Partners", "focus": ["enterprise", "cybersecurity", "ai"], "stage": "Seed-Series C"},
+        {"name": "Tiger Global", "focus": ["growth", "fintech", "internet"], "stage": "Growth"},
+        {"name": "General Catalyst", "focus": ["healthcare", "fintech", "ai"], "stage": "Seed-Growth"},
+        {"name": "Bessemer Venture Partners", "focus": ["cloud", "developer tools", "saas"], "stage": "Series A-C"},
+        {"name": "Y Combinator", "focus": ["b2b", "consumer", "deep tech"], "stage": "Pre-seed/Seed"},
+    ]
 
     def __init__(self, api_key: str, client: Any | None = None) -> None:
         if not api_key:
@@ -77,10 +87,10 @@ class GeminiService:
         }
 
         scores: dict[str, int] = {}
+        # Keyword hits add confidence above a conservative baseline (BASE_SCORE),
+        # while MIN_SCORE prevents very sparse descriptions from collapsing to zero.
         for metric, keywords in scoring_keywords.items():
             hits = sum(1 for keyword in keywords if keyword in lowered)
-            # Keyword hits add confidence above a conservative baseline (BASE_SCORE),
-            # while MIN_SCORE prevents very sparse descriptions from collapsing to zero.
             scores[metric] = min(
                 10, max(self.MIN_SCORE, self.BASE_SCORE + hits)
             )
@@ -90,19 +100,8 @@ class GeminiService:
     def match_investors(self, description: str) -> list[dict[str, str]]:
         lowered = description.lower()
 
-        investor_profiles = [
-            {"name": "Sequoia Capital", "focus": ["enterprise", "ai", "saas"], "stage": "Series A-C"},
-            {"name": "Andreessen Horowitz", "focus": ["ai", "consumer", "infrastructure"], "stage": "Seed-Growth"},
-            {"name": "Accel", "focus": ["saas", "fintech", "marketplace"], "stage": "Seed-Series B"},
-            {"name": "Lightspeed Venture Partners", "focus": ["enterprise", "cybersecurity", "ai"], "stage": "Seed-Series C"},
-            {"name": "Tiger Global", "focus": ["growth", "fintech", "internet"], "stage": "Growth"},
-            {"name": "General Catalyst", "focus": ["healthcare", "fintech", "ai"], "stage": "Seed-Growth"},
-            {"name": "Bessemer Venture Partners", "focus": ["cloud", "developer tools", "saas"], "stage": "Series A-C"},
-            {"name": "Y Combinator", "focus": ["b2b", "consumer", "deep tech"], "stage": "Pre-seed/Seed"},
-        ]
-
         ranked: list[tuple[int, dict[str, str]]] = []
-        for investor in investor_profiles:
+        for investor in self.INVESTOR_PROFILES:
             score = sum(1 for keyword in investor["focus"] if keyword in lowered)
             ranked.append((score, investor))
 
@@ -112,7 +111,7 @@ class GeminiService:
         if selected:
             return selected
 
-        return investor_profiles[:5]
+        return self.INVESTOR_PROFILES[:5]
 
     def build_investment_memo(
         self,

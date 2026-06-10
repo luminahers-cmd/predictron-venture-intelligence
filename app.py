@@ -96,17 +96,18 @@ if analyze and service is not None:
                     )
 
                 st.markdown("## Export Investment Memo")
+                export_name = startup_name or "startup"
                 st.download_button(
                     label="📄 Download Memo (TXT)",
                     data=memo,
-                    file_name=f"{startup_name or 'startup'}_investment_memo.txt",
+                    file_name=f"{export_name}_investment_memo.txt",
                     mime="text/plain",
                 )
 
                 st.download_button(
                     label="📘 Download Memo (PDF)",
                     data=generate_simple_pdf(memo),
-                    file_name=f"{startup_name or 'startup'}_investment_memo.pdf",
+                    file_name=f"{export_name}_investment_memo.pdf",
                     mime="application/pdf",
                 )
 
